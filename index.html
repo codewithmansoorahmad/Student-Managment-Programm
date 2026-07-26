@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student managment system</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>student managment System</h1>
+  <main>
+    <div id="user">
+      <form action="">
+      <label for="name">Enter Name: </label>
+      <input type="text" id="name"  required>
+
+      <label for="Age">Enter Age: </label>
+      <input type="number" min="6" max="60" id="age" required>
+
+      <label for="id">Enter Id: </label>
+      <input type="number" id="id" required>
+
+      <label for="marks">Enter Marks: </label>
+      <input type="number" id="marks" required>
+      <fieldset class="gender">
+        <legend>Select Gender</legend>
+      <label for="male">Male</label>
+      <input type="radio" id="male" name="gender" class="radio" value ="male" required>
+
+      <label for="female">Female</label>
+      <input type="radio" value="female" id="female" name="gender" class="radio" required>
+      </fieldset>
+      <button type="submit" class="add">Add Student</button>
+      </form>
+    </div>
+   
+    <div class="detail">
+      <p class="total">Total Students</p>
+      <p class="ave">Average Marks:</p>
+      <p class="high">Highest Marks: </p>
+      <p class="low">Loest Marks:</p>
+    </div>
+    <div class="searching">
+      <label for="search">Search student</label>
+      <input type="number" name="" id="search" >
+    </div>
+    <div class="card">
+
+    </div>
+
+ <div class="display">
+      <button id="show">Show Students</button>
+      <button id="hide" style="display: none;">Hide Students</button>
+      <table  border="1">
+        <thead class="thead">
+          
+        </thead>
+        <tbody class="tbody">
+
+        </tbody>
+      </table>
+    </div>
+  </main>
+ 
+<script src="script.js"></script>
+</body>
+</html>
