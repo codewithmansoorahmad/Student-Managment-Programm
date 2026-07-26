@@ -16,9 +16,9 @@ const male = document.querySelector("#male");
 const table = document.querySelector("table");
 const search = document.querySelector("#search");
 const card = document.querySelector(".card");
-
 const marks = document.querySelector("#marks");
 const form = document.querySelector("form");
+let editId;
 
 name.addEventListener("input", function () {
   name.value = name.value.replace(/[^A-Za-z]/g, "");
@@ -29,6 +29,7 @@ console.log(tasks);
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 });
+
 
 submitBtn.addEventListener("click", function (event) {
   // event.preventDefault();
@@ -44,7 +45,35 @@ submitBtn.addEventListener("click", function (event) {
   ) {
     return;
   }
+ let index=tasks.findIndex((item)=>item.id===editId)
+      if(index!==-1){
+       tasks[index]={
+         id: id.value,
+    name: name.value,
+    age: age.value,
+    marks: marks.value,
+    gender: radio.value,
 
+       }
+      let idRow= tbody.querySelector("#id-"+editId)
+      idRow.innerHTML=`
+         <tr class="row" id=id-${id.value}>
+            <td>${editId+1}</td>
+            <td class="id-td">${id.value}</td>
+            <td class="name-td">${name.value}</td>
+            <td class="age-td">${age.value}</td>
+            <td class="marks-td">${marks.value}</td>
+            <td class="gender-td">${radio.value}</td>
+            <td><button id="edit-btn">Edit</button></td>
+            <td><button id="delete-btn">Delete</button></td>
+          </tr>
+          
+      `
+  localStorage.setItem("contents", JSON.stringify(tasks));
+
+  clearVal()
+return
+      }
   const existId = tasks.some((item) => item.id == id.value);
   const existName = tasks.some(
     (item) => item.name.toLowerCase() == name.value.toLowerCase(),
@@ -59,6 +88,7 @@ submitBtn.addEventListener("click", function (event) {
       return;
     }
   }
+  
 
   let obj = {
     id: id.value,
@@ -85,14 +115,9 @@ submitBtn.addEventListener("click", function (event) {
           </tr>
     `;
   }
-  tbody.innerHTML += name.value = "";
-  age.value = "";
-  id.value = "";
-  marks.value = "";
-  male.checked = false;
-  female.checked = false;
+  clearVal()
   tbody.innerHTML += `
-  <tr class="row">
+  <tr class="row" id=id-${obj.id}>
             <td>${tasks.length}</td>
             <td class="id-td">${obj.id}</td>
             <td class="name-td">${obj.name}</td>
@@ -105,9 +130,29 @@ submitBtn.addEventListener("click", function (event) {
           `;
   getResult();
 });
+function clearVal(){
+name.value = "";
+  age.value = "";
+  id.value = "";
+  marks.value = "";
+  male.checked = false;
+  female.checked = false;
+id.readOnly=false      
+
+}
+function editTable(){
+if(table.innerHTML===""&&getComputedStyle(show).display==="none"){
+    hide.style.display = "none";
+    show.style.display = "block";
+
+
+}
+}
+editTable()
 
 show.addEventListener("click", function () {
   if (tasks.length === 0) {
+    alert("NO USER IS AVAILABLE TO SHOW")
     thead.innerHTML = "";
     return;
   }
@@ -146,15 +191,16 @@ table.addEventListener("click", function (e) {
     tdGender.textContent === "male"
       ? (male.checked = true)
       : (female.checked = true);
+      editId=tdId.textContent
+     
 
-    // console.log(male)
-
-    // id.disabled=false
   }
   if (e.target.id == "delete-btn") {
     let isConfirm = confirm("CONFIRM F YOU WANT TO DELETE USER ");
 
     if (isConfirm) {
+      editTable()
+      clearVal()
       tbody.innerHTML = "";
       let tr = e.target.closest("tr");
       let tdId = tr.querySelector(".id-td");
@@ -165,8 +211,8 @@ table.addEventListener("click", function (e) {
 
         tasks.forEach((user, index) => {
           tbody.innerHTML += `
-  <tr id=id-${index}>
-            <td>${index}</td>
+  <tr id=id-${user.id}>
+            <td>${index +1}</td>
             <td class="id-td">${user.id}</td>
             <td class="name-td">${user.name}</td>
             <td class="age-td">${user.age}</td>
@@ -223,6 +269,8 @@ function getResult() {
 }
 getResult();
 function getHtml() {
+  tbody.innerHTML=""
+  thead.innerHTML=""
   thead.innerHTML = `
      <tr>
             <td>No</td>
@@ -237,8 +285,8 @@ function getHtml() {
     `;
   tasks.forEach((user, index) => {
     tbody.innerHTML += `
-  <tr class="row">
-            <td>${index}</td>
+  <tr class="row" id=id-${user.id}>
+            <td>${index+1}</td>
             <td class="id-td">${user.id}</td>
             <td class="name-td">${user.name}</td>
             <td class="age-td">${user.age}</td>
@@ -250,7 +298,6 @@ function getHtml() {
  `;
   });
 }
-// getHtml()
 
 search.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
