@@ -19,7 +19,40 @@ const card = document.querySelector(".card");
 const marks = document.querySelector("#marks");
 const form = document.querySelector("form");
 let editId;
+form.addEventListener("keydown",function(e){
+  if(e.key==="Enter"){
+    if(form.checkValidity()){
+    submitBtn.click()
+    }else{
+      form.reportValidity()
+    }
 
+
+  }
+  else if(e.target.id==="name"&&e.key==="Enter"){
+    age.focus()
+  }
+ else if(e.target.id==="age"&&e.key==="Enter"){
+    id.focus()
+  }
+ else if(e.target.id==="id"&&e.key==="Enter"){
+    marks.focus()
+  }
+  else if(e.target.id==="marks"&&e.key==="Enter"){
+    male.focus()
+  }
+ 
+  
+ else if(e.target.id==="male"&&e.key===" "){
+    male.checked=true
+  }
+
+ else if(e.target.id==="female"&&e.key===" "){
+    female.checked=true
+  }
+
+  
+})
 name.addEventListener("input", function () {
   name.value = name.value.replace(/[^A-Za-z]/g, "");
 });
@@ -35,7 +68,30 @@ submitBtn.addEventListener("click", function (event) {
   // event.preventDefault();
 
   const radio = document.querySelector('input[name="gender"]:checked');
+ if(!name.checkValidity()){
+    name.reportValidity()
+    return
 
+  }
+  if(!age.checkValidity()){
+    age.reportValidity()
+    return
+  }
+  if(!id.checkValidity()){
+    id.reportValidity()
+    return
+  }
+  if(!marks.checkValidity()){
+    marks.reportValidity()
+    return
+  }
+  if(!radio){
+    male.setCustomValidity("please select gender ")
+    male.reportValidity()
+    male.setCustomValidity("")
+    return
+    
+  }
   if (
     name.value == "" ||
     age.value == "" ||
@@ -45,6 +101,7 @@ submitBtn.addEventListener("click", function (event) {
   ) {
     return;
   }
+ 
  let index=tasks.findIndex((item)=>item.id===editId)
       if(index!==-1){
        tasks[index]={
@@ -72,6 +129,7 @@ submitBtn.addEventListener("click", function (event) {
   localStorage.setItem("contents", JSON.stringify(tasks));
 
   clearVal()
+
 return
       }
   const existId = tasks.some((item) => item.id == id.value);
@@ -80,6 +138,7 @@ return
   );
   if (existId) {
     alert("id already used ");
+    id.focus()
     return;
   }
   if (existName) {
@@ -249,19 +308,18 @@ function getResult() {
   total.textContent = "Total Students:" + tasks.length;
 
   let sum = 0;
-  let lowest = tasks[0].marks;
-  let highest = 0;
+  let lowest = Number(tasks[0].marks);
+  let highest =  Number(tasks[0].marks);
   tasks.forEach((item) => {
-    sum += Number(item.marks);
-    if (item.marks > highest) {
-      highest = item.marks;
+    let marks=Number(item.marks)
+    sum += marks;
+    if (marks > highest) {
+      highest = marks;
     }
-    if (item.marks < lowest) {
-      lowest = item.marks;
+    if (marks < lowest) {
+      lowest = marks;
     }
   });
-  console.log(sum);
-  console.log(lowest);
   averageMarks.textContent =
     "Average Marks: " + (sum / tasks.length).toFixed(2);
   highestMarks.textContent = "HighestMarks: " + highest;
@@ -301,6 +359,7 @@ function getHtml() {
 
 search.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
+    search.blur()
     let val = e.target.value;
     let filter = tasks.filter((item) => item.id === val);
     if (filter.length === 0) {
